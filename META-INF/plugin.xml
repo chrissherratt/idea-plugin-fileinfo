@@ -1,0 +1,79 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin url="http://www.intellij.org/twiki/bin/view/Main/FileInfoPlugin">
+
+    <name>File Info</name>
+
+    <description>Displays information about the selected file</description>
+
+    <version>1.4.4</version>
+
+    <vendor logo="/org/intellij/FileInfoPlugin/resources/fileInfo.png" email="cmsherratt@hotmail.com">Chris Sherratt
+    </vendor>
+
+    <idea-version since-build="6708"/>
+
+    <change-notes>
+        <![CDATA[
+            <html>
+                <ul>
+                    <li>1.4.4 - Correctly resolve references for element (Ctrl-Shift-F10)
+                    <li>1.4.3 - Built using JDK1.5
+                    <li>1.4.2 - Minimise memory leaks #2
+                    <li>1.4.1 - Minimise memory leaks
+                    <li>1.4 - Ctrl-Shift-F10 to see file info of element at cursor
+                    <li>1.3 - Compatible with Selena 6708+
+                    <li>1.2 - Compatible with Selena 6667+
+					<li>1.1.2 - Added Plugin Icon
+					<li>1.1.1 - Compatible with Demetra
+                </ul>
+            </html>
+        ]]>
+    </change-notes>
+
+    <!-- Application components of the plugin -->
+    <application-components>
+        <component>
+            <!-- Component's interface  class -->
+            <interface-class>org.intellij.FileInfoPlugin.FileInfoPluginInterface</interface-class>
+            <!-- Component's implementation class -->
+            <implementation-class>org.intellij.FileInfoPlugin.FileInfoPlugin</implementation-class>
+        </component>
+    </application-components>
+
+    <!-- Component's actions -->
+    <actions>
+
+        <action id="FileInfoPlugin.FileInfoFromEditorPopup"
+                class="org.intellij.FileInfoPlugin.FileInfoEditorPopupAction" text="Show File Info"
+                description="Show information about the current file">
+            <keyboard-shortcut first-keystroke="control F10" keymap="$default"/>
+        </action>
+        <action id="FileInfoPlugin.FileInfoSelectedItem" class="org.intellij.FileInfoPlugin.FileInfoEditorPopupAction"
+                text="Show File Info" description="Show information about the currently selected file">
+            <keyboard-shortcut first-keystroke="control F10" keymap="$default"/>
+        </action>
+        <action id="FileInfoPlugin.FileInfoElementSelectedItem" class="org.intellij.FileInfoPlugin.FileInfoElementEditorPopupAction"
+                text="Show Element File Info" description="Show information about the currently selected element">
+            <keyboard-shortcut first-keystroke="control alt shift F10" keymap="$default"/>
+        </action>
+
+        <group>
+            <reference id="FileInfoPlugin.FileInfoFromEditorPopup"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CompareClipboardWithSelection"/>
+        </group>
+        <group>
+            <reference id="FileInfoPlugin.FileInfoFromEditorPopup"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="after" relative-to-action="VersionControlsGroup"/>
+        </group>
+        <group>
+            <reference id="FileInfoPlugin.FileInfoSelectedItem"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="CompareFileWithEditor"/>
+        </group>
+        <group>
+            <reference id="FileInfoPlugin.FileInfoSelectedItem"/>
+            <add-to-group group-id="FavoritesViewPopupMenu" anchor="after" relative-to-action="CompareFileWithEditor"/>
+        </group>
+
+    </actions>
+
+</idea-plugin>

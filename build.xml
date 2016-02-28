@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="fileinfoplugin" default="all">
+
+    <property file="fileinfoplugin.properties"/>
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+   <property name="skip.tests" value="true"/>
+    -->
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="128m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <include name="**/?*.properties"/>
+        <include name="**/?*.xml"/>
+        <include name="**/?*.gif"/>
+        <include name="**/?*.png"/>
+        <include name="**/?*.jpeg"/>
+        <include name="**/?*.jpg"/>
+        <include name="**/?*.html"/>
+        <include name="**/?*.dtd"/>
+        <include name="**/?*.tld"/>
+    </patternset>
+
+    <!-- Modules -->
+
+
+    <!-- Module fileinfoPlugin -->
+
+    <dirname property="module.fileinfoplugin.basedir" file="${ant.file}"/>
+
+
+    <property name="compiler.args.fileinfoplugin" value="${compiler.args}"/>
+
+    <property name="fileinfoplugin.output.dir" value="${module.fileinfoplugin.basedir}/classes"/>
+    <property name="fileinfoplugin.testoutput.dir" value="${module.fileinfoplugin.basedir}/classes"/>
+
+    <path id="fileinfoplugin.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="fileinfoplugin.module.classpath"/>
+
+
+    <patternset id="excluded.from.module.fileinfoplugin">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.fileinfoplugin">
+        <patternset refid="excluded.from.module.fileinfoplugin"/>
+    </patternset>
+
+    <path id="fileinfoplugin.module.sourcepath">
+        <dirset dir="${module.fileinfoplugin.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.fileinfoplugin"
+            depends="compile.module.fileinfoplugin.production,compile.module.fileinfoplugin.tests"
+            description="Compile module fileinfoPlugin"/>
+
+    <target name="compile.module.fileinfoplugin.production"
+            description="Compile module fileinfoPlugin; production classes">
+        <mkdir dir="${fileinfoplugin.output.dir}"/>
+        <javac destdir="${fileinfoplugin.output.dir}"
+               source="1.5"
+               target="1.5"
+               debug="${compiler.debug}"
+               nowarn="${compiler.generate.no.warnings}"
+               memoryMaximumSize="${compiler.max.memory}"
+               fork="true">
+            <compilerarg line="${compiler.args.fileinfoplugin}"/>
+            <bootclasspath refid="fileinfoplugin.module.bootclasspath"/>
+            <classpath refid="fileinfoplugin.module.classpath"/>
+            <src refid="fileinfoplugin.module.sourcepath"/>
+        </javac>
+
+        <copy todir="${fileinfoplugin.output.dir}">
+            <fileset dir="${module.fileinfoplugin.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.fileinfoplugin.tests" depends="compile.module.fileinfoplugin.production"
+            description="compile module fileinfoPlugin; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.fileinfoplugin" description="cleanup module">
+        <delete dir="${fileinfoplugin.output.dir}"/>
+        <delete dir="${fileinfoplugin.testoutput.dir}"/>
+    </target>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.fileinfoplugin" description="cleanup all"/>
+
+    <target name="all" depends="init, clean, compile.module.fileinfoplugin, zip.source, build.jar"
+            description="build all"/>
+
+    <target name="build.jar" description="Build the plugin jar">
+        <jar destfile="${module.fileinfoplugin.basedir}/dist/FileinfoPlugin.jar">
+            <zipfileset dir="${module.fileinfoplugin.basedir}/classes"/>
+            <zipfileset dir="${module.fileinfoplugin.basedir}/META-INF" prefix="META-INF"/>
+        </jar>
+    </target>
+
+    <target name="zip.source" description="Put all source files in zip">
+        <zip destfile="${module.fileinfoplugin.basedir}/dist/FileinfoPlugin-src.zip">
+            <zipfileset dir="${module.fileinfoplugin.basedir}/src" prefix="src">
+                <patternset refid="ignored.files"/>
+            </zipfileset>
+            <zipfileset dir="${module.fileinfoplugin.basedir}/META-INF" prefix="META-INF"/>
+            <zipfileset dir="${module.fileinfoplugin.basedir}" includes="*.ipr"/>
+            <zipfileset dir="${module.fileinfoplugin.basedir}" includes="*.iml"/>
+            <zipfileset dir="${module.fileinfoplugin.basedir}" includes="*.xml"/>
+            <zipfileset dir="${module.fileinfoplugin.basedir}" includes="*.properties"/>
+        </zip>
+    </target>
+
+</project>
